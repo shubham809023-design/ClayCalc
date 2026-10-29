@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+  <meta name="theme-color" content="#efe3d6">
+  <meta name="description" content="ClayCalc — a soft 3D clay calculator with scientific mode, history and keyboard support.">
+  <title>ClayCalc — 3D Clay Calculator</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g' cx='32%25' cy='26%25' r='75%25'%3E%3Cstop offset='0' stop-color='%23fff2e8'/%3E%3Cstop offset='45%25' stop-color='%23ffb99b'/%3E%3Cstop offset='1' stop-color='%23e8815d'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' fill='url(%23g)'/%3E%3C/svg%3E">
+  <script>
+    try {
+      const stored = localStorage.getItem('claycalc.theme');
+      const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', dark ? '#241b25' : '#efe3d6');
+    } catch (error) {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="scene" aria-hidden="true">
+    <span class="blob blob-peach"></span>
+    <span class="blob blob-lilac"></span>
+    <span class="blob blob-mint"></span>
+  </div>
+
+  <main class="app">
+    <h1 class="sr-only">ClayCalc — 3D clay calculator</h1>
+    <section class="calculator" aria-label="Clay calculator">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-name">Clay<em>Calc</em></span>
+        </div>
+        <div class="top-actions">
+          <button class="mode-btn" id="angleToggle" type="button" title="Toggle angle mode" aria-label="Angle mode: degrees">DEG</button>
+          <button class="icon-btn history-toggle" id="historyToggle" type="button" title="History" aria-label="Open history" aria-expanded="false" aria-controls="historyPanel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 7v5.2l3.4 2"></path>
+            </svg>
+          </button>
+          <button class="icon-btn" id="themeToggle" type="button" title="Toggle theme" aria-label="Switch to dark theme">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 14.4A8.6 8.6 0 0 1 9.6 4a8.6 8.6 0 1 0 10.4 10.4Z"></path>
+            </svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.2"></circle>
+              <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="display" aria-label="Display">
+        <div class="expression" id="expression"></div>
+        <div class="result" id="result" role="button" tabindex="0" title="Click to copy result">0</div>
+      </section>
+
+      <div class="sci" id="sciPad" aria-label="Scientific functions">
+        <button type="button" class="key key--sci" data-insert="sin(" title="Sine" aria-label="Sine">sin</button>
+        <button type="button" class="key key--sci" data-insert="cos(" title="Cosine" aria-label="Cosine">cos</button>
+        <button type="button" class="key key--sci" data-insert="tan(" title="Tangent" aria-label="Tangent">tan</button>
+        <button type="button" class="key key--sci" data-insert="ln(" title="Natural log" aria-label="Natural log">ln</button>
+        <button type="button" class="key key--sci" data-insert="log(" title="Base 10 log" aria-label="Base 10 log">log</button>
+        <button type="button" class="key key--sci" data-insert="√(" title="Square root" aria-label="Square root">√</button>
+        <button type="button" class="key key--sci" data-insert="^2" title="Square" aria-label="Square">x²</button>
+        <button type="button" class="key key--sci" data-insert="^" title="Power" aria-label="Power">xʸ</button>
+        <button type="button" class="key key--sci" data-insert="π" title="Pi" aria-label="Pi">π</button>
+        <button type="button" class="key key--sci" data-insert="e" title="Euler's number" aria-label="Euler's number">e</button>
+        <button type="button" class="key key--sci" data-insert="(" title="Open parenthesis" aria-label="Open parenthesis">(</button>
+        <button type="button" class="key key--sci" data-insert=")" title="Close parenthesis" aria-label="Close parenthesis">)</button>
+      </div>
+
+      <div class="keypad" aria-label="Keypad">
+        <button type="button" class="key key--danger key--action" data-action="clear" title="Clear" aria-label="Clear">AC</button>
+        <button type="button" class="key key--action" data-action="delete" title="Delete" aria-label="Delete">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 6H9.7L4 12l5.7 6H20z"></path>
+            <path d="M12.2 9.6l4.6 4.8M16.8 9.6l-4.6 4.8"></path>
+          </svg>
+        </button>
+        <button type="button" class="key key--op" data-insert="%" title="Percent" aria-label="Percent">%</button>
+        <button type="button" class="key key--op" data-insert="÷" title="Divide" aria-label="Divide">÷</button>
+
+        <button type="button" class="key" data-insert="7">7</button>
+        <button type="button" class="key" data-insert="8">8</button>
+        <button type="button" class="key" data-insert="9">9</button>
+        <button type="button" class="key key--op" data-insert="×" title="Multiply" aria-label="Multiply">×</button>
+
+        <button type="button" class="key" data-insert="4">4</button>
+        <button type="button" class="key" data-insert="5">5</button>
+        <button type="button" class="key" data-insert="6">6</button>
+        <button type="button" class="key key--op" data-insert="−" title="Subtract" aria-label="Subtract">−</button>
+
+        <button type="button" class="key" data-insert="1">1</button>
+        <button type="button" class="key" data-insert="2">2</button>
+        <button type="button" class="key" data-insert="3">3</button>
+        <button type="button" class="key key--op" data-insert="+" title="Add" aria-label="Add">+</button>
+
+        <button type="button" class="key key--action" data-action="sign" title="Change sign" aria-label="Change sign">±</button>
+        <button type="button" class="key" data-insert="0">0</button>
+        <button type="button" class="key" data-insert="." aria-label="Decimal point">.</button>
+        <button type="button" class="key key--eq" data-action="equals" title="Equals" aria-label="Equals">=</button>
+      </div>
+
+      <footer class="statusbar">
+        <button type="button" class="ghost-btn" id="sciToggle" aria-expanded="true" aria-controls="sciPad">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 18c4.2 0 3.2-12 7.5-12S15 18 20 18"></path>
+          </svg>
+          Scientific
+        </button>
+        <span class="hint">Enter = · Esc clear</span>
+      </footer>
+    </section>
+
+    <aside class="history" id="historyPanel" aria-label="Calculation history">
+      <div class="history-head">
+        <h2>History</h2>
+        <div class="history-actions">
+          <button type="button" class="icon-btn icon-btn--sm" id="clearHistory" title="Clear history" aria-label="Clear history">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 7h16"></path>
+              <path d="M9.5 7V5.2h5V7"></path>
+              <path d="M6.4 7l.9 12.2h9.4L17.6 7"></path>
+              <path d="M10.2 11v4.8M13.8 11v4.8"></path>
+            </svg>
+          </button>
+          <button type="button" class="icon-btn icon-btn--sm history-close" id="closeHistory" title="Close history" aria-label="Close history">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="history-list" id="historyList"></div>
+      <p class="history-foot" id="historyFoot">Tap a result to reuse it</p>
+    </aside>
+  </main>
+
+  <div class="backdrop" id="backdrop"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="engine.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

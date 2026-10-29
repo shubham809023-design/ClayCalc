@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.ClayCalc" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/clay_bg</item>
+        <item name="android:navigationBarColor">@color/clay_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

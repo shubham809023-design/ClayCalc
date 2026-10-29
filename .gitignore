@@ -12,3 +12,10 @@ Thumbs.db
 .env
 .env.*
 node_modules/
+
+# Android build outputs
+.gradle/
+build/
+*/build/
+*.apk
+*.aab

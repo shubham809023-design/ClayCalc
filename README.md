@@ -3,11 +3,13 @@
 A soft, tactile 3D claymorphic scientific web calculator designed with modern aesthetics and robust mathematical precision.
 
 [![Live Demo](https://img.shields.io/badge/demo-online-brightgreen.svg)](https://shubham809023-design.github.io/ClayCalc/)
+[![Download APK](https://img.shields.io/badge/download-APK-orange.svg)](https://github.com/shubham809023-design/ClayCalc/releases/latest)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Security](https://img.shields.io/badge/security-hardened-success.svg)
 
-🌐 **Live Demo:** [https://shubham809023-design.github.io/ClayCalc/](https://shubham809023-design.github.io/ClayCalc/)
+🌐 **Live Demo:** [https://shubham809023-design.github.io/ClayCalc/](https://shubham809023-design.github.io/ClayCalc/)  
+📱 **Android APK Download:** [ClayCalc-v1.0.0.apk](https://github.com/shubham809023-design/ClayCalc/releases/tag/v1.0.0)
 
 ---
 
