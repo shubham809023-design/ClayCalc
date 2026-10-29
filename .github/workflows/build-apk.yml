@@ -24,8 +24,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Accept Android SDK Licenses
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Sync Web Assets
         run: |
@@ -39,9 +43,10 @@ jobs:
 
       - name: Prepare APK Files
         run: |
-          APK_FILE=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
+          APK_FILE=$(find android/app/build/outputs/apk -name "*.apk" | head -n 1)
           if [ -z "$APK_FILE" ]; then
-            APK_FILE=$(find android/app/build/outputs/apk -name "*.apk" | head -n 1)
+            echo "No APK found!"
+            exit 1
           fi
           echo "Found APK at: $APK_FILE"
           cp "$APK_FILE" ClayCalc.apk
